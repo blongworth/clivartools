@@ -1,0 +1,11 @@
+Package: clivartools
+Type: Package
+Title: Tools for Extracting and Analysing CLIVAR Profile Data
+Version: 0.1.0
+Author: Brett Longworth
+Maintainer: Brett Longworth <blongworth@whoi.edu>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
