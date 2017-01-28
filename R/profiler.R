@@ -26,5 +26,27 @@ getProfile <- function(cruise, station) {
   clivar %>% arrange(depth, wheel)
 }
 
+# read cruise ids from database
+getCruises <- function() {
 
+  sql <- paste0("SELECT DISTINCT whpid from woce_rec_num")
+  con <- amstools::conNOSAMS()
+  cruises <- sqlQuery(con, sql)
+  odbcClose(con)
+
+  cruises
+}
+
+# read stations for a cruise from database
+getStations <- function(cruise) {
+
+  # validate cruise
+  sql <- paste0("SELECT DISTINCT station from woce_rec_num
+                  WHERE whpid = '", cruise, "'")
+  con <- amstools::conNOSAMS()
+  cruises <- sqlQuery(con, sql)
+  odbcClose(con)
+
+  cruises
+}
 
