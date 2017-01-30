@@ -68,7 +68,7 @@ server <- function(session, input, output) {
    })
 
    output$profileTable <- renderTable({
-     select(profile(), whpid, station, cast, depth_corr, fm_corr, sig_fm_corr)
+     select(profile(), whpid, station, cast, depth_corr, f_modern, f_ext_error)
    })
 }
 
