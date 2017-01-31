@@ -5,7 +5,13 @@ library(dplyr)
 library(ggplot2)
 library(amstools)
 
-# read wheel data from database
+#' Read CLIVAR profile data from DB
+#'
+#' @param cruise A character value with the whpid cruise name
+#' @param station A numeric with the station number
+#'
+#' @return A data frame with profile data
+#' @export
 getProfile <- function(cruise, station) {
 	# validate input
 
@@ -24,15 +30,18 @@ getProfile <- function(cruise, station) {
   )
 
   con <- amstools::conNOSAMS()
-  data <- sqlQuery(con, sql)
-  odbcClose(con)
-  amstools::testDB(data)
-  data %>% arrange(depth, wheel)
+  data <- RODBC::sqlQuery(con, sql)
+  RODBC::odbcClose(con)
+  amstools::checkDB(data)
+  dplyr::arrange(data, depth, wheel)
 }
 
-# read cruise ids from database
+#' Read cruise ids from database
+#'
+#' @return A data frame with cruise names (whpid)
+#' @export
 getCruises <- function() {
-  
+
   # TODO: select by date
   sql <- paste0("SELECT DISTINCT whpid FROM woce_rec_num ORDER BY whpid
 		   WHERE EXISTS
@@ -41,20 +50,26 @@ getCruises <- function() {
 		")
 
   con <- amstools::conNOSAMS()
-  cruises <- sqlQuery(con, sql)
-  odbcClose(con)
+  cruises <- RODBC::sqlQuery(con, sql)
+  RODBC::odbcClose(con)
 
   # TODO: weed out bad entries
 
   cruises
 }
 
-# read stations for a cruise from database
+#' Read stations for a cruise from database
+#'
+#' @param cruise A character vector with cruise name (whpid)
+#' @param hasdata Checks that data is in os table if TRUE
+#'
+#' @return A data frame with station names 
+#' @export
 getStations <- function(cruise, hasdata = TRUE) {
 
   # TODO: validate cruise
   if (hasdata) {
-  sql <- paste0("SELECT DISTINCT station from woce_rec_num
+  sql <- paste0("SELECT DISTINCT station FROM woce_rec_num
                   WHERE EXISTS
                       (SELECT * FROM os
                          WHERE woce_rec_num.rec_num = os.rec_num
@@ -67,9 +82,9 @@ getStations <- function(cruise, hasdata = TRUE) {
 
   }
   con <- amstools::conNOSAMS()
-  stations <- sqlQuery(con, sql)
-  odbcClose(con)
-  amstools::testDB(stations)
+  stations <- RODBC::sqlQuery(con, sql)
+  RODBC::odbcClose(con)
+  amstools::checkDB(stations)
   # TODO: still getting stations with no data
 
   stations
