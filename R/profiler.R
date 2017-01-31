@@ -1,9 +1,4 @@
-
-# load libraries
-library(RODBC)
-library(dplyr)
-library(ggplot2)
-library(amstools)
+# General funtions for pulling profiles from database
 
 #' Read CLIVAR profile data from DB
 #'
@@ -43,11 +38,11 @@ getProfile <- function(cruise, station) {
 getCruises <- function() {
 
   # TODO: select by date
-  sql <- paste0("SELECT DISTINCT whpid FROM woce_rec_num ORDER BY whpid
-		   WHERE EXISTS
-                      (SELECT * FROM os
-                         WHERE woce_rec_num.rec_num = os.rec_num)
-		")
+  sql <- paste0("SELECT DISTINCT whpid FROM woce_rec_num
+		               WHERE EXISTS
+                     (SELECT * FROM os
+                        WHERE woce_rec_num.rec_num = os.rec_num)
+	                 ORDER BY whpid")
 
   con <- amstools::conNOSAMS()
   cruises <- RODBC::sqlQuery(con, sql)
@@ -63,11 +58,14 @@ getCruises <- function() {
 #' @param cruise A character vector with cruise name (whpid)
 #' @param hasdata Checks that data is in os table if TRUE
 #'
-#' @return A data frame with station names 
+#' @return A data frame with station names
 #' @export
 getStations <- function(cruise, hasdata = TRUE) {
 
   # TODO: validate cruise
+
+  stopifnot(is.character(cruise))
+
   if (hasdata) {
   sql <- paste0("SELECT DISTINCT station FROM woce_rec_num
                   WHERE EXISTS
