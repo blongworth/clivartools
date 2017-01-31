@@ -48,9 +48,10 @@ getCruises <- function() {
   cruises <- RODBC::sqlQuery(con, sql)
   RODBC::odbcClose(con)
 
+  cruises <- as.character(cruises$whpid)
   # TODO: weed out bad entries
-
-  cruises
+  cruises <- cruises[!is.na(cruises)]
+  cruises[cruises != " "]
 }
 
 #' Read stations for a cruise from database
@@ -85,6 +86,6 @@ getStations <- function(cruise, hasdata = TRUE) {
   amstools::checkDB(stations)
   # TODO: still getting stations with no data
 
-  stations
+  stations$station
 }
 
