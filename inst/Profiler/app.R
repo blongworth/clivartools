@@ -1,14 +1,14 @@
 #
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+# CLIVAR Profile Plotter
+# 
+# Pulls cruises and stations and plots
 
 library(shiny)
 library(clivartools)
+
+    #Get and order available cruises, most recent first
+    cruises <- getCruises()
+
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -20,9 +20,10 @@ ui <- fluidPage(
    sidebarLayout(
       sidebarPanel(
         selectInput("cruiseSelect",
-                    label = h3("Cruise"),"I08S"),
-        selectInput("stationSelect",
-                    label = h3("Station"),"42")
+                    label = h3("Cruise"), choices = cruises ),
+        uiOutput("stationSelect")
+        #selectInput("stationSelect",
+        #            label = h3("Station"))
       ),
 
       # Plot and data table
@@ -36,32 +37,30 @@ ui <- fluidPage(
 
 # Define server logic
 server <- function(session, input, output) {
-     observe({
 
-    #Get and order available cruises, most recent first
-    cruises <- getCruises()
+   # Produce station list based on cruise selection
+   output$stationSelect<- renderUI({
+     validate(need(input$cruiseSelect, message = FALSE))
+     stations <- getStations(input$cruiseSelect)
+     checkboxGroupInput("stations", "Choose station", stations)
+   })
 
-    # Change values for input$cruiseSelect
-    updateSelectInput(session, "cruiseSelect",
-                      choices = cruises)
+   # observe({
+   #
+   #   # If no cruise is selected, don't do anything
+   #   validate(need(input$cruiseSelect, message = FALSE))
+   #
+   #   #Get and order available stations within cruise
+   #   stations <- getStations(input$cruiseSelect)
+   #
+   #   # Change values for input$stationSelect
+   #   updateSelectInput(session, "stationSelect",
+   #                     choices = stations)
+   # })
 
-  })
-
-     observe({
-
-    #Get and order available stations within cruise
-    stations <- getStations(input$cruiseSelect)
-
-    # Change values for input$stationSelect
-    updateSelectInput(session, "stationSelect",
-                      choices = stations)
-
-  })
-  profile <- reactive({
-
-    getProfile(input$cruiseSelect, input$stationSelect)
-
-  })
+   profile <- reactive({
+     getProfile(input$cruiseSelect, input$stationSelect)
+   })
 
    output$profilePlot <- renderPlot({
      plotProfile(profile())
