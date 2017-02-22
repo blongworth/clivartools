@@ -2,6 +2,9 @@
 
 export(getCruises)
 export(getProfile)
+export(getProfileSR)
 export(getStations)
+export(getWheelCLIVAR)
 export(plotProfile)
+export(plotWheelProfile)
 import(ggplot2)

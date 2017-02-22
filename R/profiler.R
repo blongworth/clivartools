@@ -1,5 +1,36 @@
 # General funtions for pulling profiles from database
 
+# TODO: function to get profiles for a wheel
+
+#' Read CLIVAR profile data for a wheel from DB
+#'
+#' @param A character value with the wheel name
+#'
+#' @return A data frame with profile data
+#' @export
+getWheelCLIVAR <- function(wheel) {
+	# validate input
+
+  sql <- paste0("SELECT whpid, station, cast, depth, depth_corr, expocode,
+                   niskin, wheel, wheel_pos, target.tp_num,
+                   graphite.osg_num, sample_name, graphite.ws_num,
+		   ws_method_num, fm_corr, sig_fm_corr
+		 FROM snics_results
+		 JOIN target ON snics_results.tp_num = target.tp_num
+		 JOIN graphite on target.osg_num = graphite.osg_num
+		 JOIN woce_rec_num on target.rec_num = woce_rec_num.rec_num
+		 JOIN water_strip on graphite.ws_num = water_strip.ws_num
+		 WHERE wheel = '", wheel, "'"
+  )
+
+  con <- amstools::conNOSAMS()
+  data <- RODBC::sqlQuery(con, sql)
+  RODBC::odbcClose(con)
+  amstools::checkDB(data)
+  dplyr::arrange(data, whpid, station, depth) %>%
+    dplyr::mutate(f_modern = fm_corr, f_ext_error = sig_fm_corr)
+}
+
 #' Read CLIVAR profile data from DB
 #'
 #' @param cruise A character value with the whpid cruise name
@@ -17,6 +48,36 @@ getProfile <- function(cruise, station) {
 		 FROM os
 		 JOIN target ON os.tp_num = target.tp_num
 		 JOIN snics_results ON os.tp_num = snics_results.tp_num
+		 JOIN graphite on target.osg_num = graphite.osg_num
+		 JOIN woce_rec_num on target.rec_num = woce_rec_num.rec_num
+		 JOIN water_strip on graphite.ws_num = water_strip.ws_num
+		 WHERE whpid = '", cruise, "'
+		   AND station = ", station
+  )
+
+  con <- amstools::conNOSAMS()
+  data <- RODBC::sqlQuery(con, sql)
+  RODBC::odbcClose(con)
+  amstools::checkDB(data)
+  dplyr::arrange(data, depth, wheel)
+}
+
+#' Read CLIVAR profile data from snics_results in DB
+#'
+#' @param cruise A character value with the whpid cruise name
+#' @param station A numeric with the station number
+#'
+#' @return A data frame with profile data
+#' @export
+getProfileSR <- function(cruise, station) {
+	# validate input
+
+  sql <- paste0("SELECT whpid, station, cast, depth, depth_corr, expocode,
+                   niskin, wheel, wheel_pos, target.tp_num,
+                   graphite.osg_num, sample_name, graphite.ws_num,
+		   ws_method_num, fm_corr, sig_fm_corr
+		 FROM snics_results
+		 JOIN target ON snics_results.tp_num = target.tp_num
 		 JOIN graphite on target.osg_num = graphite.osg_num
 		 JOIN woce_rec_num on target.rec_num = woce_rec_num.rec_num
 		 JOIN water_strip on graphite.ws_num = water_strip.ws_num
