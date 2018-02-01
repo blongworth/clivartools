@@ -15,3 +15,8 @@ Install the package
 ```
 install_github("blongworth/clivartools")
 ```
+
+A recent version of devtools should grab the amstools package, but if not:
+```
+install_github("blongworth/amstools")
+```
