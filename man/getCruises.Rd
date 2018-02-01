@@ -12,4 +12,3 @@ A data frame with cruise names (whpid)
 \description{
 Read cruise ids from database
 }
-

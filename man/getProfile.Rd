@@ -9,7 +9,8 @@ getProfile(cruise, station)
 \arguments{
 \item{cruise}{A character value with the whpid cruise name}
 
-\item{station}{A numeric with the station number}
+\item{station}{A numeric with the station number. Retrieve
+all stations if not given.}
 }
 \value{
 A data frame with profile data
@@ -17,4 +18,3 @@ A data frame with profile data
 \description{
 Read CLIVAR profile data from DB
 }
-

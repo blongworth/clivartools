@@ -17,4 +17,3 @@ A data frame with station names
 \description{
 Read stations for a cruise from database
 }
-

@@ -34,7 +34,8 @@ getWheelCLIVAR <- function(wheel) {
 #' Read CLIVAR profile data from DB
 #'
 #' @param cruise A character value with the whpid cruise name
-#' @param station A numeric with the station number
+#' @param station A numeric with the station number. Retrieve
+#' all stations if not given.
 #'
 #' @return A data frame with profile data
 #' @export
@@ -51,9 +52,12 @@ getProfile <- function(cruise, station) {
 		 JOIN graphite on target.osg_num = graphite.osg_num
 		 JOIN woce_rec_num on target.rec_num = woce_rec_num.rec_num
 		 JOIN water_strip on graphite.ws_num = water_strip.ws_num
-		 WHERE whpid = '", cruise, "'
-		   AND station = ", station
-  )
+		 WHERE whpid IN (", paste(shQuote(cruise, type = "sh"),
+		                          collapse = ", "), ")")
+
+  if (!missing(station)) {
+    sql <- paste(sql, "AND station IN (",paste(station, collapse = ", "), ")")
+  }
 
   con <- amstools::conNOSAMS()
   data <- RODBC::sqlQuery(con, sql)

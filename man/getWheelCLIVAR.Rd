@@ -7,7 +7,7 @@
 getWheelCLIVAR(wheel)
 }
 \arguments{
-\item{A}{character value with the wheel name}
+\item{wheel}{A character value with the wheel name}
 }
 \value{
 A data frame with profile data
@@ -15,4 +15,3 @@ A data frame with profile data
 \description{
 Read CLIVAR profile data for a wheel from DB
 }
-

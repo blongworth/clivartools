@@ -17,4 +17,3 @@ A data frame with profile data
 \description{
 Read CLIVAR profile data from snics_results in DB
 }
-

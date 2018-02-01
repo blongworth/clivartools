@@ -15,4 +15,3 @@ A ggplot object
 \description{
 Plot a depth profile from a station
 }
-
