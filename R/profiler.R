@@ -42,21 +42,28 @@ getWheelCLIVAR <- function(wheel) {
 getProfile <- function(cruise, station) {
 	# validate input
 
-  sql <- paste0("SELECT whpid, station, cast, depth, depth_corr, expocode,
+  sql <- paste0("SELECT woce_rec_num.whpid,
+                   woce_rec_num.station,
+                   woce_rec_num.cast, depth, depth_corr,
+                   woce_rec_num.expocode, collection_date,
+                   latitude, longitude, ws_delta_c13,
                    niskin, wheel, wheel_pos, target.tp_num,
                    graphite.osg_num, sample_name, graphite.ws_num,
-		   ws_method_num, f_modern, f_ext_error
-		 FROM os
-		 JOIN target ON os.tp_num = target.tp_num
-		 JOIN snics_results ON os.tp_num = snics_results.tp_num
-		 JOIN graphite on target.osg_num = graphite.osg_num
-		 JOIN woce_rec_num on target.rec_num = woce_rec_num.rec_num
-		 JOIN water_strip on graphite.ws_num = water_strip.ws_num
-		 WHERE whpid IN (", paste(shQuote(cruise, type = "sh"),
-		                          collapse = ", "), ")")
+                   ws_method_num, f_modern, f_ext_error
+                 FROM os
+                 JOIN target ON os.tp_num = target.tp_num
+                 JOIN snics_results ON os.tp_num = snics_results.tp_num
+                 JOIN graphite ON target.osg_num = graphite.osg_num
+                 JOIN woce_rec_num ON target.rec_num = woce_rec_num.rec_num
+                 JOIN woce_loc ON woce_rec_num.expocode = woce_loc.expocode
+                   AND woce_rec_num.station = woce_loc.station
+                   AND woce_rec_num.cast = woce_loc.cast
+                 JOIN water_strip ON graphite.ws_num = water_strip.ws_num
+                 WHERE woce_rec_num.whpid IN (", paste(shQuote(cruise, type = "sh"),
+            		                          collapse = ", "), ")")
 
   if (!missing(station)) {
-    sql <- paste(sql, "AND station IN (",paste(station, collapse = ", "), ")")
+    sql <- paste(sql, "AND woce_rec_num.station IN (",paste(station, collapse = ", "), ")")
   }
 
   con <- amstools::conNOSAMS()
