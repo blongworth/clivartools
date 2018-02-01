@@ -4,7 +4,7 @@
 
 #' Read CLIVAR profile data for a wheel from DB
 #'
-#' @param A character value with the wheel name
+#' @param wheel A character value with the wheel name
 #'
 #' @return A data frame with profile data
 #' @export
