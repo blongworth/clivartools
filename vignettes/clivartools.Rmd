@@ -1,0 +1,40 @@
+---
+title: "Using CLIVARtools"
+author: "Brett Longworth"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using clivartools}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This vignette serves as a brief introduction to the clivartools package.
+
+First, load the library.
+
+```{r}
+library(clivartools)
+```
+
+## What cruises and stations are available?
+
+Use getCruises and getStations to find what data to work with.
+
+```{r}
+cruises <- getCruises()
+cruises[1:5]
+
+stations <- getStations(cruises[5])
+stations[1:5]
+```
+
+## Get data from a profile
+
+Use `getProfile` to get data for a profile. If `station` or `cruise` are vectors, `getProfile` will get data from all cruises/stations requested. If `station` is not given, all profiles from a cruise or cruises are returned.
+
+```{r}
+data <- getProfile("A16S", 51)
+head(data)
+```
+
