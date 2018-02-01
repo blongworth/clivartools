@@ -2,16 +2,16 @@
 % Please edit documentation in R/plots.R
 \name{plotWheelProfile}
 \alias{plotWheelProfile}
-\title{Plot a depth profile from a station}
+\title{Plot CLIVAR data from a wheel}
 \usage{
-plotWheelProfile(profile)
+plotWheelProfile(wheel)
 }
 \arguments{
-\item{profile}{A datatable in the format of getProfile output}
+\item{wheel}{A wheel name in format: "USAMS010101".}
 }
 \value{
 A ggplot object
 }
 \description{
-Plot a depth profile from a station
+Plot CLIVAR data from a wheel
 }

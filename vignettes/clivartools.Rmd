@@ -38,3 +38,8 @@ data <- getProfile("A16S", 51)
 head(data)
 ```
 
+## Plot a profile
+
+```{r}
+plotProfile(data)
+```
