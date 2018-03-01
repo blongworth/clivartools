@@ -11,6 +11,26 @@ vignette: >
 
 This vignette serves as a brief introduction to the clivartools package.
 
+## Installing
+
+The package should be installed from github. You'll need the `devtools` package
+installed.
+
+```{r, eval=FALSE}
+devtools::install_github("blongworth/amstools")
+```
+
+To interact with the NOSAMS DB, you'll need your credentials in an environment
+variable called CONSTRING, which should be in the following format:
+
+```
+"DSN=database;UID=username;PWD=password"
+```
+
+The database also has to be set up as an ODBC connection.
+
+## Getting started
+
 First, load the library.
 
 ```{r}
