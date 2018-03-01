@@ -39,6 +39,7 @@ getWheelCLIVAR <- function(wheel) {
 #'
 #' @return A data frame with profile data
 #' @export
+#' @importFrom dplyr arrange mutate "%>%"
 getProfile <- function(cruise, station) {
 	# validate input
 
@@ -47,12 +48,12 @@ getProfile <- function(cruise, station) {
                    woce_rec_num.cast, depth, depth_corr,
                    woce_rec_num.expocode, collection_date,
                    latitude, longitude, ws_delta_c13,
-                   niskin, wheel, wheel_pos, target.tp_num,
-                   graphite.osg_num, sample_name, graphite.ws_num,
-                   ws_method_num, f_modern, f_ext_error
+                   niskin, wheel_id, wheel_position, target.tp_num,
+                   graphite.osg_num, target_name, graphite.ws_num,
+                   ws_method_num, f_modern , f_int_error, f_ext_error
                  FROM os
                  JOIN target ON os.tp_num = target.tp_num
-                 JOIN snics_results ON os.tp_num = snics_results.tp_num
+                 JOIN wheel_pos ON os.tp_num = wheel_pos.tp_num
                  JOIN graphite ON target.osg_num = graphite.osg_num
                  JOIN woce_rec_num ON target.rec_num = woce_rec_num.rec_num
                  JOIN woce_loc ON woce_rec_num.expocode = woce_loc.expocode
@@ -70,7 +71,10 @@ getProfile <- function(cruise, station) {
   data <- RODBC::sqlQuery(con, sql)
   RODBC::odbcClose(con)
   amstools::checkDB(data)
-  dplyr::arrange(data, depth, wheel)
+
+  data %>%
+    arrange(depth, wheel_id) %>%
+    mutate(rep_err = pmax(f_int_error, f_ext_error))
 }
 
 #' Read CLIVAR profile data from snics_results in DB

@@ -8,7 +8,7 @@
 # function to plot profile from dataframe returned by getProfile
 plotProfile <- function(profile) {
   p <- dplyr::mutate(profile, depth = ifelse(depth_corr == -99, depth, depth_corr))
-  ggplot(p, aes(depth, f_modern, shape = wheel, color = wheel)) +
+  ggplot(p, aes(depth, f_modern, shape = wheel_id, color = wheel_id)) +
     geom_errorbar(aes(ymin=f_modern-f_ext_error,
                       ymax=f_modern+f_ext_error)) + geom_line() +
     geom_point(size=2) + #facet_grid(station ~ .) +
