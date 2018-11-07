@@ -4,7 +4,7 @@ test_that("getCruises returns all cruises", {
   #as of March 2018
   cruises <- getCruises()
   expect_type(cruises, "character")
-  expect_length(cruises, 63)
+  expect_length(cruises, 65)
 } )
 
 test_that("getStations returns all stations", {

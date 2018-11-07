@@ -24,8 +24,7 @@ getWheelCLIVAR <- function(wheel) {
   )
 
   con <- amstools::conNOSAMS()
-  data <- RODBC::sqlQuery(con, sql)
-  RODBC::odbcClose(con)
+  data <- odbc::dbGetQuery(con, sql)
   amstools::checkDB(data)
   dplyr::arrange(data, whpid, station, depth) %>%
     dplyr::mutate(f_modern = fm_corr, f_ext_error = sig_fm_corr)
@@ -68,8 +67,7 @@ getProfile <- function(cruise, station) {
   }
 
   con <- amstools::conNOSAMS()
-  data <- RODBC::sqlQuery(con, sql)
-  RODBC::odbcClose(con)
+  data <- odbc::dbGetQuery(con, sql)
   amstools::checkDB(data)
 
   data %>%
@@ -101,8 +99,7 @@ getProfileSR <- function(cruise, station) {
   )
 
   con <- amstools::conNOSAMS()
-  data <- RODBC::sqlQuery(con, sql)
-  RODBC::odbcClose(con)
+  data <- odbc::dbGetQuery(con, sql)
   amstools::checkDB(data)
   dplyr::arrange(data, depth, wheel)
 }
@@ -121,8 +118,7 @@ getCruises <- function() {
 	                 ORDER BY whpid")
 
   con <- amstools::conNOSAMS()
-  cruises <- RODBC::sqlQuery(con, sql)
-  RODBC::odbcClose(con)
+  cruises <- odbc::dbGetQuery(con, sql)
 
   cruises <- as.character(cruises$whpid)
   # TODO: weed out bad entries
@@ -157,8 +153,7 @@ getStations <- function(cruise, hasdata = TRUE) {
 
   }
   con <- amstools::conNOSAMS()
-  stations <- RODBC::sqlQuery(con, sql)
-  RODBC::odbcClose(con)
+  stations <- odbc::dbGetQuery(con, sql)
   amstools::checkDB(stations)
   # TODO: still getting stations with no data
 
