@@ -30,3 +30,20 @@ plotWheelProfile <- function(wheel) {
   #plot using plotProfile
   clivartools::plotProfile(profile)
 }
+
+#' Plot station locations from a section
+#'
+#' @param section A character vector containing a section name.
+#'
+#' @return A ggplot object
+#' @export
+#' @import ggplot2
+#'
+plotSection <- function(section) {
+  section <- getProfile(section)
+  extent <- c(range(section$latitude), range(section$longitude))
+  map <- borders("world")
+  ggplot() +
+    map +
+    geom_point(data = section, aes(x = longitude, y = latitude))
+}
