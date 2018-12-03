@@ -19,15 +19,21 @@ installed.
 ```{r, eval=FALSE}
 devtools::install_github("blongworth/amstools")
 ```
+To interact with the NOSAMS DB, you'll need the odbc package installed and
+a working connection to the NOSAMS database via ODBC. An ODBC connection string
+should be stored in an environment variable called CONSTRING. The package has
+been tested with the Microsoft MSSQL driver on Windows and Mac OS X, and with
+the unixODBC and FreeTDS drivers on Linux.
 
-To interact with the NOSAMS DB, you'll need your credentials in an environment
-variable called CONSTRING, which should be in the following format:
+If a Data Source Name (DSN) is set up within your odbc system, a CONSTRING
+variable in the following format will work:
 
 ```
 "DSN=database;UID=username;PWD=password"
 ```
 
-The database also has to be set up as an ODBC connection.
+This can be done from R with the `Sys.setenv` command, but this may or may not
+be persistent depending on your environment.
 
 ## Getting started
 
