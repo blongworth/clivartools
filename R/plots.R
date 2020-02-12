@@ -7,13 +7,38 @@
 #' @import ggplot2
 # function to plot profile from dataframe returned by getProfile
 plotProfile <- function(profile) {
-  p <- dplyr::mutate(profile, depth = ifelse(depth_corr == -99, depth, depth_corr))
-  ggplot(p, aes(depth, f_modern, shape = wheel_id, color = wheel_id)) +
-    geom_errorbar(aes(ymin=f_modern-f_ext_error,
-                      ymax=f_modern+f_ext_error)) + geom_line() +
-    geom_point(size=2) + #facet_grid(station ~ .) +
-    coord_flip() + scale_x_reverse()
+  profile %>% dplyr::mutate(depth = ifelse(depth_corr == -99,
+                                           depth,
+                                           depth_corr)) %>%
+    ggplot(aes(depth, f_modern, shape = wheel_id, color = wheel_id)) +
+      geom_errorbar(aes(ymin=f_modern-f_ext_error,
+                        ymax=f_modern+f_ext_error)) +
+      geom_line() +
+      geom_point(size=2) + #facet_grid(station ~ .) +
+      coord_flip() + scale_x_reverse()
 }
+
+#' Plot profile data from snics_results for a station
+#'
+#' @param profile A datatable in the format of getProfileSR output
+#'
+#' @return A ggplot object
+#' @export
+#' @import ggplot2
+# function to plot profile from dataframe returned by getProfile
+plotProfileSR <- function(profile) {
+  profile %>% dplyr::mutate(depth = ifelse(depth_corr == -99,
+                                           depth,
+                                           depth_corr)) %>%
+    ggplot(aes(depth, fm_corr, shape = wheel, color = wheel)) +
+      geom_errorbar(aes(ymin=fm_corr - sig_fm_corr,
+                        ymax=fm_corr + sig_fm_corr)) +
+      geom_line() +
+      geom_point(size=2) +
+      #facet_grid(station ~ .) +
+      coord_flip() + scale_x_reverse()
+}
+
 
 #' Plot CLIVAR data from a wheel
 #'
