@@ -20,3 +20,4 @@ Suggests: knitr,
     rmarkdown,
     testthat
 VignetteBuilder: knitr
+URL: https://blongworth.github.io/clivartools/
