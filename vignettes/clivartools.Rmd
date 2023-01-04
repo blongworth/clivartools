@@ -47,7 +47,7 @@ library(clivartools)
 
 Use getCruises and getStations to find what data to work with.
 
-```{r}
+```{r eval = FALSE}
 cruises <- getCruises()
 cruises[1:5]
 
@@ -59,13 +59,13 @@ stations[1:5]
 
 Use `getProfile` to get data for a profile. If `station` or `cruise` are vectors, `getProfile` will get data from all cruises/stations requested. If `station` is not given, all profiles from a cruise or cruises are returned.
 
-```{r}
+```{r eval = FALSE}
 data <- getProfile("A16S", 51)
 head(data)
 ```
 
 ## Plot a profile
 
-```{r}
+```{r eval = FALSE}
 plotProfile(data)
 ```
